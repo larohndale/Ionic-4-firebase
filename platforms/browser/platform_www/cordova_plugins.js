@@ -114,7 +114,6 @@ module.exports.metadata =
     "cordova-plugin-browsertab": "0.2.0",
     "cordova-plugin-buildinfo": "2.0.3",
     "cordova-plugin-camera": "4.0.3",
-    "cordova-plugin-customurlscheme": "4.4.0",
     "cordova-plugin-device": "1.1.4",
     "cordova-plugin-firebase": "1.0.5",
     "cordova-plugin-inappbrowser": "3.2.0",

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Platform, NavController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -8,7 +8,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { Router } from '@angular/router';
 import { ThemeService } from './services/theme.service';
-
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
@@ -20,7 +19,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     public firebaseCordova: AngularFireAuth,
-    private navCtrl: NavController,
+    private router: Router,
     private theme: ThemeService
   ) {
     this.initializeApp();
@@ -43,11 +42,11 @@ export class AppComponent {
           if (user) {
             // this.router.navigateByUrl('');
           } else {
-            this.navCtrl.navigateForward('/login');
+            this.router.navigateByUrl('/login');
           }
         },
         () => {
-          // this.navCtrl.navigateForward('/login');
+          // this.router.navigateByUrl('/login');
         }
       );
   }
@@ -76,7 +75,7 @@ export class AppComponent {
   async signOut() {
     const res = await this.firebaseCordova.signOut();
     console.log(res);
-    this.navCtrl.navigateForward('/login');
+    this.router.navigateByUrl('/login');
   }
 
 }

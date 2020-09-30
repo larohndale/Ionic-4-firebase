@@ -16,10 +16,6 @@
     "cordova-plugin-camera": {
       "PACKAGE_NAME": "com.ploonu"
     },
-    "cordova-plugin-customurlscheme": {
-      "URL_SCHEME": "io.ionic.starter",
-      "PACKAGE_NAME": "com.ploonu"
-    },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.ploonu"
     },
