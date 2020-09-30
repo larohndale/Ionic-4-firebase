@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Upload</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/']">
+        Back
+        <ion-icon mode="ios" color="primary" slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen padding>
+
+  <ion-row margin class="rowStyle">
+    <button ion-button icon-only color="primary" clear (click)="addPhoto()">
+      <ion-icon name="images"></ion-icon>
+    </button>
+
+    <ion-input type="text" placeholder="Say something..." [(ngModel)]="text"></ion-input>
+
+    <button ion-button icon-only color="primary" clear (click)="post()">
+      <ion-icon name="send"></ion-icon>
+    </button>
+  </ion-row>
+
+  <ion-row margin class="rowStyle" *ngIf="image">
+
+    <ion-card class="round-corners">
+      <!-- <ion-badge class="badge">
+        <ion-icon name="close" class="close-icon" (click)="openAlert()"></ion-icon>
+      </ion-badge> -->
+      <img [src]="image" class="round-corners">
+    </ion-card>
+  </ion-row>
+</ion-content>

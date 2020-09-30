@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import * as firebase from 'firebase/app';
 
 @Component({
@@ -18,17 +17,17 @@ export class LoginPage {
   passwordType = 'password';
   passwordIcon = 'eye-off';
 
-  constructor(public afs: AngularFireAuth, public rout: Router ,  public alertController: AlertController) { }
+  constructor(public afs: AngularFireAuth, public navCtrl: NavController ,  public alertController: AlertController) { }
 
   async login() {
 
     const { username, password } = this;
     console.log(username, password);
     try {
-      const res = await this.afs.auth.signInWithEmailAndPassword(username, password);
+      const res = await this.afs.signInWithEmailAndPassword(username, password);
       console.log(res);
       setTimeout(() => {
-        this.rout.navigateByUrl('');
+        this.navCtrl.navigateForward('/tabs/feed');
       }, 1000);
     } catch (error) {
       console.log(error);
@@ -52,9 +51,9 @@ export class LoginPage {
   }
   async loginGmail() {
     try {
-      const res = await this.afs.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+      const res = await this.afs.signInWithPopup(new firebase.auth.GoogleAuthProvider());
       console.log(res);
-      this.rout.navigateByUrl('main');
+      this.navCtrl.navigateForward('/tabs/feed');
     } catch (error) {
       if (error.code === 'auth/wrong-password') {
         this.error('Incorrect Password');
@@ -75,7 +74,7 @@ export class LoginPage {
   }
 
   goRegister() {
-    this.rout.navigateByUrl('/register');
+    this.navCtrl.navigateForward('/register');
   }
 
   async error(mensaje: string) {
@@ -93,8 +92,8 @@ export class LoginPage {
 moveFocus(nextElement) {
   nextElement.setFocus();
 }
-  gotoslides() {
-    this.rout.navigateByUrl('/');
-  }
+  // gotoslides() {
+  //   this.rout.navigateByUrl('/');
+  // }
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { ServicesService } from '../services/services.service';
 import { ThemeService } from '../services/theme.service';
@@ -17,7 +17,7 @@ export class ProfilePage implements OnInit {
   anuncios: any;
   empty: Boolean;
 
-  constructor(private rout: Router, private services: ServicesService, private aut: AngularFireAuth , private theme: ThemeService) {
+  constructor(private router: Router, private services: ServicesService, private firebaseCordova: AngularFireAuth, private theme: ThemeService) {
 
   }
 
@@ -35,16 +35,16 @@ export class ProfilePage implements OnInit {
 
   }
 
-  update(e) {
+  update(e: { detail: { checked: any; }; }) {
     e.detail.checked ? this.enableDark() : this.enableLight()
   }
 
   ngOnInit() {
-    this.getLogueado();
-   }
+    this.getUser();
+  }
 
-  getLogueado() {
-    this.aut.authState
+  getUser() {
+    this.firebaseCordova.authState
       .subscribe(
         user => {
           if (user) {
@@ -53,18 +53,18 @@ export class ProfilePage implements OnInit {
             console.log(this.uid);
             this.getProfile(this.uid);
           } else {
-            this.rout.navigateByUrl('/login');
+            this.router.navigateByUrl('/login');
           }
         },
         () => {
-          this.rout.navigateByUrl('/login');
+          this.router.navigateByUrl('/login');
         }
       );
   }
 
 
-  async getProfile(id) {
-    await this.services.getProfile(id).subscribe((data => {
+  async getProfile(id: any) {
+    this.services.getProfile(id).subscribe((data => {
       console.log(data);
       if (data.length === 0) {
         this.empty = false;
@@ -78,14 +78,14 @@ export class ProfilePage implements OnInit {
 
 
 
-  goedit() {
-    this.rout.navigateByUrl(`/edit-profile`);
+  editProfile() {
+    this.router.navigateByUrl(`/edit-profile`);
   }
 
   async signOut() {
-    const res = await this.aut.auth.signOut();
+    const res = await this.firebaseCordova.signOut();
     console.log(res);
-    this.rout.navigateByUrl('/login');
+    this.router.navigateByUrl('/login');
   }
 
 

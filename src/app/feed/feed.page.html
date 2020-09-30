@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Feed</ion-title>
+    <ion-title mode="ios" color="primary"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content fullscreen>
+  <!-- 
+  <ion-row margin class="rowStyle">
+    <button ion-button icon-only color="primary" clear (click)="addPhoto()">
+      <ion-icon name="images"></ion-icon>
+    </button>
+
+    <ion-input type="text" placeholder="Say something..." [(ngModel)]="text"></ion-input>
+
+    <button ion-button icon-only color="primary" clear (click)="post()">
+      <ion-icon name="send"></ion-icon>
+    </button>
+  </ion-row>
+
+  <ion-row margin class="rowStyle" *ngIf="image">
+
+    <ion-card class="round-corners">
+      <ion-badge class="badge">
+        <ion-icon name="close" class="close-icon" (click)="openAlert()"></ion-icon>
+      </ion-badge>
+      <img [src]="image" class="round-corners">
+    </ion-card>
+  </ion-row> -->
+
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+      refreshingSpinner="circles" refreshingText="Refreshing..."></ion-refresher-content>
+  </ion-refresher>
+
+
+  <ion-card *ngFor="let post of posts">
+    {{ post.data() | json  }}
+
+    <!-- <ion-item-divider color="primary"> -->
+    <ion-item color="primary">
+      <ion-avatar item-start>
+        <img [src]="post.data().owner_photo" *ngIf="post.data().owner_photo">
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
+          *ngIf="!post.data().owner_photo">
+      </ion-avatar>
+      <p class="ion-padding-horizontal">@{{ post.data().owner_name }}</p>
+
+      <ion-col class="ion-text-end">
+        <button *ngIf="userID === post.data().owner" ion-button (click)="deleteAction(post)">
+          <ion-icon class="icon" name="trash"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-item>
+    <!-- </ion-item-divider> -->
+
+
+    <img [src]="post.data().image" *ngIf="post.data().image">
+
+    <ion-card-content>
+      <p>
+        {{ post.data().text }}
+      </p>
+    </ion-card-content>
+
+
+
+    <ion-row class="bottom-bar">
+      <ion-col>
+        <button ion-button class="text" clear small (click)="like(post)">
+          <ion-icon class="icon" name="thumbs-up"></ion-icon>
+          {{ post?.data().likesCount || 0 }}
+        </button>
+      </ion-col>
+
+      <ion-col>
+        <button class="text" (click)="comment(post)">
+          <ion-icon class="icon" name="text"></ion-icon>
+          {{post.data().commentsCount || 0}}
+        </button>
+      </ion-col>
+
+      <ion-col>
+        <button ion-button class="text" clear small>
+          <ion-icon class="icon" name="time"></ion-icon>
+          {{ ago(post.data().created.toDate()) }}
+        </button>
+
+      </ion-col>
+
+
+
+    </ion-row>
+
+  </ion-card>
+
+  <ion-infinite-scroll (ionInfinite)="loadMorePosts($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

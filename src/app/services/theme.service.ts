@@ -1,4 +1,4 @@
-import { Injectable, RendererFactory2, Inject, Renderer, Renderer2 } from '@angular/core';
+import { Injectable, RendererFactory2, Inject, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({

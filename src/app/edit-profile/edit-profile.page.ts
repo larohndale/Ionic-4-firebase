@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { ServicesService } from '../services/services.service';
 import { Observable } from 'rxjs';
 import { LoadingController } from '@ionic/angular';
-import { finalize } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { ServicesService } from '../services/services.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-profile',
@@ -13,12 +13,12 @@ import { ServicesService } from '../services/services.service';
   styleUrls: ['./edit-profile.page.scss'],
 })
 export class EditProfilePage implements OnInit {
-  @ViewChild('imageProd') inputimageProd: ElementRef;
+  @ViewChild('imageProd', { static: true }) inputimageProd: ElementRef;
   id: any;
   uid: string;
   name: any;
   phone: string;
-  adress: string;
+  about: string;
   img: any;
   mail: string;
   uploadPercent: Observable<number>;
@@ -28,23 +28,20 @@ export class EditProfilePage implements OnInit {
 
   cp: Boolean;
 
-  constructor(private rout: Router,
-    private route: ActivatedRoute,
+  constructor(private roouter: Router,
     private services: ServicesService,
     private afs: AngularFireStorage,
     private loadingController: LoadingController,
-    private aut: AngularFireAuth) {
+    private auth: AngularFireAuth) {
   }
 
   ngOnInit() {
-    this.logueado();
+    this.getUser();
   }
 
 
-
-
-  logueado() {
-    this.aut.authState
+  getUser() {
+    this.auth.authState
       .subscribe(
         user => {
           if (user) {
@@ -56,28 +53,28 @@ export class EditProfilePage implements OnInit {
         });
   }
 
-  async getProfile(id) {
-    await this.services.getProfile(id).subscribe((data: any) => {
+  async getProfile(id: string) {
+    this.services.getProfile(id).subscribe((data: any) => {
       console.log(data);
       if (data.length !== 0) {
+        console.log(data[0].payload.doc);
         this.cp = true;
         this.id = data[0].payload.doc.id;
         this.name = data[0].payload.doc.data().name;
         this.phone = data[0].payload.doc.data().phone;
-        this.adress = data[0].payload.doc.data().adress;
+        this.about = data[0].payload.doc.data().about;
         this.img = data[0].payload.doc.data().img;
-        this.username =  data[0].payload.doc.data().username;
-        console.log('profil full');
+        this.username = data[0].payload.doc.data().username;
+        console.log('profile full');
       } else {
         this.cp = false;
         console.log('profile empty');
       }
-
     });
   }
 
 
-  onUpload(e) {
+  onUpload(e: { target: { files: any[]; }; }) {
     console.log(e.target.files[0]);
 
     const id = Math.random().toString(36).substring(2);
@@ -91,7 +88,7 @@ export class EditProfilePage implements OnInit {
   }
 
 
-  save(name, phone, adress, username) {
+  save(name: any, phone: any, about: any, username?: any) {
     console.log(this.cp);
     const image = this.inputimageProd.nativeElement.value;
     const data = {
@@ -99,7 +96,7 @@ export class EditProfilePage implements OnInit {
       phone: phone,
       mail: this.mail,
       img: image || this.img,
-      adress: adress,
+      about: about,
       uid: this.uid,
       username: username || 'null'
     };
@@ -108,13 +105,13 @@ export class EditProfilePage implements OnInit {
       this.services.createUser(data).then(
         res => {
           console.log('Upload' + res);
-          this.rout.navigateByUrl(`/profile`);
+          this.roouter.navigateByUrl(`/profile`);
         });
     } else {
       this.services.updateUser(data, this.id).then(
         res => {
           console.log('Upload' + res);
-          this.rout.navigateByUrl(`/profile`);
+          this.roouter.navigateByUrl(`/profile`);
         });
     }
 
@@ -132,7 +129,7 @@ export class EditProfilePage implements OnInit {
 
     console.log('Loading dismissed!');
   }
-  moveFocus(nextElement) {
+  moveFocus(nextElement: { setFocus: () => void; }) {
     nextElement.setFocus();
   }
 

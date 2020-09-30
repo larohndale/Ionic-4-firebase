@@ -45,7 +45,7 @@ export class MainPage implements OnInit {
   }
 
   async signOut() {
-    const res = await this.aut.auth.signOut();
+    const res = await this.aut.signOut();
     console.log(res);
     this.router.navigateByUrl('/login');
   }

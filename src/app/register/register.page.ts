@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +18,7 @@ export class RegisterPage {
   passwordType = 'password';
   passwordIcon = 'eye-off';
 
-  constructor(public afr: AngularFireAuth, public rout: Router , public alertController: AlertController) { }
+  constructor(public afr: AngularFireAuth, public navCtrl: NavController , public alertController: AlertController) { }
 
 
 
@@ -28,13 +28,13 @@ export class RegisterPage {
 
     if (password !== cpassword) {
       this.errorpassIguales();
-      this.rout.navigate(['/register']);
+      this.navCtrl.navigateForward(['/register']);
     } else {
       try {
-        await this.afr.auth.createUserWithEmailAndPassword(email, password).then(data => {
+        await this.afr.signInWithEmailAndPassword(email, password).then(data => {
           console.log(data);
           setTimeout( () => {
-            this.rout.navigate(['']);
+            this.navCtrl.navigateRoot('/tabs/feed');
           }, 1000);
         });
 
@@ -58,7 +58,7 @@ export class RegisterPage {
     }
   }
   goLogin() {
-    this.rout.navigate(['/login']);
+    this.navCtrl.navigateBack(['/login']);
   }
 
   async errorpassIguales() {

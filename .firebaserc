@@ -1,5 +1,14 @@
 {
   "projects": {
-    "default": "ionic4firebase-st"
+    "default": "ploonu-1c84c"
+  },
+  "targets": {
+    "ploonu-1c84c": {
+      "hosting": {
+        "app": [
+          "ploonu-1c84c"
+        ]
+      }
+    }
   }
 }
